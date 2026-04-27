@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Babak Shirkhorshidi — Robotics Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #111118;
+      --border: #1e1e2e;
+      --accent: #00e5ff;
+      --accent2: #7c3aed;
+      --text: #e2e2f0;
+      --muted: #666680;
+      --card: #13131f;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* ── GRID BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── GLOWING ORB ── */
+    .orb {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,58,237,0.12) 0%, transparent 70%);
+      top: -200px;
+      right: -200px;
+      pointer-events: none;
+      z-index: 0;
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+    @keyframes drift {
+      from { transform: translate(0, 0); }
+      to   { transform: translate(-60px, 80px); }
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.2rem 3rem;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── SECTIONS ── */
+    section { position: relative; z-index: 1; }
+
+    /* ── HERO ── */
+    #hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 3rem 4rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .hero-content { flex: 1; }
+
+    .hero-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .hero-tag::before {
+      content: '';
+      display: inline-block;
+      width: 30px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(3rem, 7vw, 6rem);
+      font-weight: 800;
+      line-height: 1.0;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .name-accent { color: var(--accent); }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 560px;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.85rem 1.8rem;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+      border: none;
+    }
+    .btn-primary:hover { background: #33eaff; transform: translateY(-2px); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+    .btn-secondary:hover { background: rgba(0,229,255,0.08); transform: translateY(-2px); }
+
+    /* ── STAT STRIP ── */
+    .stat-strip {
+      display: flex;
+      gap: 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-top: 5rem;
+    }
+
+    .stat {
+      flex: 1;
+      padding: 1.5rem 2rem;
+      border-right: 1px solid var(--border);
+    }
+    .stat:last-child { border-right: none; }
+
+    .stat-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent);
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 0.25rem;
+    }
+
+    /* ── CONTAINER ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 5rem 3rem;
+    }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+    .section-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+    }
+    .section-title {
+      font-size: clamp(1.8rem, 3vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    /* ── EXPERIENCE ── */
+    #experience { background: var(--surface); }
+
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
+    }
+
+    .exp-card {
+      position: relative;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .exp-card::before {
+      content: '';
+      position: absolute;
+      left: -2.5rem;
+      top: 2rem;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+    }
+
+    .exp-card:hover {
+      border-color: var(--accent);
+      transform: translateX(6px);
+    }
+
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .exp-company {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .exp-date {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      border: 1px solid rgba(0,229,255,0.3);
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+    }
+
+    .exp-role {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+    }
+
+    .exp-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .exp-list li {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.6;
+      padding-left: 1rem;
+      position: relative;
+    }
+    .exp-list li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    /* ── SKILLS ── */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .skill-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.5rem;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .skill-card:hover {
+      border-color: var(--accent2);
+      transform: translateY(-4px);
+    }
+
+    .skill-card-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .skill-card-title::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .skill-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--text);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      padding: 0.3rem 0.7rem;
+      border-radius: 4px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── CONTACT ── */
+    #contact {
+      background: var(--surface);
+      text-align: center;
+    }
+
+    .contact-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .contact-title {
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+    }
+
+    .contact-sub {
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .contact-link {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.1em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.2rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .contact-link:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+      background: rgba(0,229,255,0.05);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+      border-top: 1px solid var(--border);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── FADE IN ANIMATION ── */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links { display: none; }
+      #hero { padding: 7rem 1.5rem 3rem; }
+      .container { padding: 3rem 1.5rem; }
+      .stat-strip { flex-wrap: wrap; }
+      .stat { border-right: none; border-bottom: 1px solid var(--border); }
+      .stat:last-child { border-bottom: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="orb"></div>
+
+<!-- NAV -->
+<nav>
+  <span class="nav-logo">babak.sh</span>
+  <ul class="nav-links">
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-content">
+    <div class="hero-tag">Robotics Engineer</div>
+    <h1>Babak<br><span class="name-accent">Shirkhor&shy;shidi</span></h1>
+    <p class="hero-desc">
+      Building autonomous mobile robots, robotic manipulation systems, and digital twins.
+      From embedded firmware to ROS2 navigation stacks — I bridge hardware and intelligence.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="mailto:babakshirkhorshidi@gmail.com">Get in Touch</a>
+      <a class="btn btn-secondary" href="#experience">View Work</a>
+    </div>
+
+    <div class="stat-strip">
+      <div class="stat">
+        <span class="stat-num">6+</span>
+        <span class="stat-label">Years in Robotics</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">ROS2</span>
+        <span class="stat-label">Primary Stack</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">3</span>
+        <span class="stat-label">Companies</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">AMR</span>
+        <span class="stat-label">Specialty</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Work</span>
+      <h2 class="section-title">Experience</h2>
+    </div>
+
+    <div class="timeline">
+
+      <div class="exp-card fade-in">
+        <div class="exp-header">
+          <span class="exp-company">Sina Robotics and Medical Innovators Co.</span>
+          <span class="exp-date">Dec 2024 – Present</span>
+        </div>
+        <div class="exp-role">Robotics Software Engineer</div>
+        <ul class="exp-list">
+          <li>Developed a digital twin of a telesurgery laparoscopy robot using Unreal Engine, ROS, and TwinCAT networking libraries</li>
+          <li>Designed and implemented a custom Unreal Engine plugin for ultra-fast robot pose and state handling</li>
+          <li>Integrated real-time robot communication with visualization and simulation environments</li>
+        </ul>
+      </div>
+
+      <div class="exp-card fade-in">
+        <div class="exp-header">
+          <span class="exp-company">Tensor Group</span>
+          <span class="exp-date">Sep 2024 – Present</span>
+        </div>
+        <div class="exp-role">Robotics Engineer</div>
+        <ul class="exp-list">
+          <li>Upgraded an AGV prototype into a fully autonomous AMR for industrial warehouse usage</li>
+          <li>Developed a multi-agent industrial pallet-lifting robot capable of coordinated operation</li>
+          <li>Designed a networked high-resolution industrial camera system for OCR processing</li>
+          <li>Built a custom Remote I/O system with RS232/RS485 communication, real-time parcel measurement, and embedded firmware</li>
+        </ul>
+      </div>
+
+      <div class="exp-card fade-in">
+        <div class="exp-header">
+          <span class="exp-company">Syntech Robotics — MRL @Work Team</span>
+          <span class="exp-date">Dec 2017 – Apr 2023</span>
+        </div>
+        <div class="exp-role">Robotics Team Member</div>
+        <ul class="exp-list">
+          <li>Industrial task automation, mobile manipulation, and autonomous navigation</li>
+          <li>SLAM, localization, and 5-DoF robotic arm manipulation</li>
+          <li>Deployed robotic software on Jetson Nano and Raspberry Pi single-board computers</li>
+        </ul>
+      </div>
+
+      <div class="exp-card fade-in">
+        <div class="exp-header">
+          <span class="exp-company">Syntech Robotics — Autonomous Car Team</span>
+          <span class="exp-date">Apr 2023 – Present</span>
+        </div>
+        <div class="exp-role">Robotics Engineer</div>
+        <ul class="exp-list">
+          <li>Mechanical and electronic modifications of RC vehicles for autonomous operation</li>
+          <li>Controller development using ROS2</li>
+        </ul>
+      </div>
+
+      <div class="exp-card fade-in">
+        <div class="exp-header">
+          <span class="exp-company">Collaborative Mobile Manipulator</span>
+          <span class="exp-date">Master's Thesis</span>
+        </div>
+        <div class="exp-role">Researcher / Designer</div>
+        <ul class="exp-list">
+          <li>Designed a mobile robot with two collaborative 6-DoF robotic arms</li>
+          <li>Full 3D simulation in Gazebo, RViz, and CoppeliaSim</li>
+          <li>Controlled arms via ROS MoveIt and MATLAB; state-machine-based task architecture</li>
+          <li>Implemented coordination logic for dual-arm collaboration</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="container">
+    <div class="section-header">
+      <span class="section-tag">Stack</span>
+      <h2 class="section-title">Technical Skills</h2>
+    </div>
+
+    <div class="skills-grid">
+
+      <div class="skill-card fade-in">
+        <div class="skill-card-title">Robotics & ROS</div>
+        <div class="skill-tags">
+          <span class="tag">ROS / ROS2</span>
+          <span class="tag">Nav2</span>
+          <span class="tag">MoveIt</span>
+          <span class="tag">Behavior Trees</span>
+          <span class="tag">Motion Planning</span>
+          <span class="tag">Kinematics</span>
+          <span class="tag">Control Systems</span>
+        </div>
+      </div>
+
+      <div class="skill-card fade-in">
+        <div class="skill-card-title">Programming</div>
+        <div class="skill-tags">
+          <span class="tag">Python</span>
+          <span class="tag">C++</span>
+          <span class="tag">C</span>
+          <span class="tag">Bash / Shell</span>
+          <span class="tag">Multithreading</span>
+          <span class="tag">NumPy</span>
+          <span class="tag">Django</span>
+        </div>
+      </div>
+
+      <div class="skill-card fade-in">
+        <div class="skill-card-title">Perception & CV</div>
+        <div class="skill-tags">
+          <span class="tag">OpenCV</span>
+          <span class="tag">PCL</span>
+          <span class="tag">ORB-SLAM</span>
+          <span class="tag">RTAB-Map</span>
+          <span class="tag">Cartographer</span>
+          <span class="tag">Sensor Fusion</span>
+          <span class="tag">LiDAR / IMU</span>
+        </div>
+      </div>
+
+      <div class="skill-card fade-in">
+        <div class="skill-card-title">Simulation</div>
+        <div class="skill-tags">
+          <span class="tag">Gazebo</span>
+          <span class="tag">Isaac Sim</span>
+          <span class="tag">CoppeliaSim</span>
+          <span class="tag">Unreal Engine</span>
+          <span class="tag">Digital Twin</span>
+          <span class="tag">RViz</span>
+        </div>
+      </div>
+
+      <div class="skill-card fade-in">
+        <div class="skill-card-title">Embedded Systems</div>
+        <div class="skill-tags">
+          <span class="tag">STM32</span>
+          <span class="tag">Arduino</span>
+          <span class="tag">ESP32</span>
+          <span class="tag">CAN / UART</span>
+          <span class="tag">SPI / I2C</span>
+          <span class="tag">BLDC / Stepper</span>
+        </div>
+      </div>
+
+      <div class="skill-card fade-in">
+        <div class="skill-card-title">Linux & DevOps</div>
+        <div class="skill-tags">
+          <span class="tag">Linux (Ubuntu)</span>
+          <span class="tag">Docker</span>
+          <span class="tag">Git / GitHub Actions</span>
+          <span class="tag">TCP/IP</span>
+          <span class="tag">VPN / SSH</span>
+          <span class="tag">Wireshark</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-inner">
+      <p class="hero-tag" style="justify-content:center; margin-bottom:1rem;">Available for opportunities</p>
+      <h2 class="contact-title">Let's Build<br><span class="name-accent">Something Real</span></h2>
+      <p class="contact-sub">
+        I'm open to robotics engineering roles, research collaborations, and consulting projects.
+        Whether it's AMR development, digital twins, or embedded systems — let's talk.
+      </p>
+      <div class="contact-links">
+        <a class="contact-link" href="mailto:babakshirkhorshidi@gmail.com">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          babakshirkhorshidi@gmail.com
+        </a>
+        <a class="contact-link" href="tel:+989122735240">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 11a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 0h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 7.6a16 16 0 0 0 5.9 5.9l1.01-.89a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 14.92z"/></svg>
+          +98 912 273 5240
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <span>© 2025 Babak Shirkhorshidi — Robotics Engineer</span>
+</footer>
+
+<script>
+  // Intersection Observer for fade-in animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, 100);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
